@@ -4,6 +4,7 @@ import sys
 
 from gsp import GSP
 from util import argmax_index
+import math
 
 class Akdvbb:
     """Balanced bidding agent"""
@@ -41,6 +42,18 @@ class Akdvbb:
         return info
 
 
+    def top_position(self, t):
+        return round(30 * math.sin(math.pi * t / 24) + 50)
+    
+    def clicks_all(self, t, n):
+        res = []
+        temp = self.top_position(t)
+        res.append(temp)
+        for _ in range(0, n):
+            temp *= 0.75
+            res.append(temp)
+        return(res)
+    
     def expected_utils(self, t, history, reserve):
         """
         Figure out the expected utility of bidding such that we win each
@@ -50,10 +63,23 @@ class Akdvbb:
         returns a list of utilities per slot.
         """
         # TODO: Fill this in
-        utilities = []   # Change this
-
-        
-        return utilities
+        prev_round = history.round(t-1)
+        all_clickthroughs = self.clicks_all(t, len(prev_round.occupants))   # Change this
+        all_bids = [x[1] for x in prev_round.bids]
+        all_bids = sorted(all_bids, reverse=True)
+        all_bids_shift = all_bids[1:]
+        #FIXME: Might need to have these align
+       # all_bids_shift.append(0)
+        all_expected_utilities = []
+#        print("All clickthrough")
+#        print(all_clickthroughs)
+#        print("All bids")
+#        print(all_bids_shift)
+        for i in range(0, len(all_bids_shift)):
+            all_expected_utilities.append(all_clickthroughs[i] * (self.value - all_bids_shift[i]))
+#        print("expect utilties")
+        print(all_expected_utilities)
+        return all_expected_utilities
 
     def target_slot(self, t, history, reserve):
         """Figure out the best slot to target, assuming that everyone else
@@ -79,6 +105,7 @@ class Akdvbb:
         # If s*_j is the top slot, bid the value v_j
 
         prev_round = history.round(t-1)
+        print(prev_round)
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
 
         # TODO: Fill this in.
