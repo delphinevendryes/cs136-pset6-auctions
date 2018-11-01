@@ -44,17 +44,18 @@ class VCG:
         
         (allocation, just_bids) = zip(*allocated_bids)
 
-        # TODO: You just have to implement this function
         def total_payment(k):
+            print("At this stage k=%d" % k)
             """
             Total payment for a bidder in slot k.
             """
             c = slot_clicks
             n = len(allocation)
-            # TODO: Compute the payment and return it.
             v_bids = [x[1] for x in valid_bids]
             if k == n-1:
-                if len(v_bids) < k+1:
+                print(v_bids)
+                print(c)
+                if len(v_bids) <= k+1:
                     return c[k] * reserve
                 else:
                     return c[k] * max(reserve, v_bids[k+1])
