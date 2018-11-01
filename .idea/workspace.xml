@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45832265-ee1f-44a0-913d-204461f7493f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/akdvbb.py" afterPath="$PROJECT_DIR$/akdvbb.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/auction.py" afterPath="$PROJECT_DIR$/auction.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bbagent_template.py" afterPath="$PROJECT_DIR$/bbagent_template.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vcg.py" afterPath="$PROJECT_DIR$/vcg.py" />
     </list>
     <ignored path="pset6_code.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -65,31 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vcg.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="vcg.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vcg.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="truthful.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/truthful.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="auction.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/auction.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="52">
-              <caret line="91" column="11" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="11" />
+            <state relative-caret-position="480">
+              <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -117,6 +94,7 @@
         <option value="$PROJECT_DIR$/bbagent_template.py" />
         <option value="$PROJECT_DIR$/auction.py" />
         <option value="$PROJECT_DIR$/akdvbb.py" />
+        <option value="$PROJECT_DIR$/vcg.py" />
       </list>
     </option>
   </component>
@@ -407,26 +385,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/truthful.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/akdvbudget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vcg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -449,8 +411,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/auction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="91" column="11" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="11" />
+        <state relative-caret-position="885">
+          <caret line="151" column="4" selection-start-line="151" selection-start-column="4" selection-end-line="151" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/truthful.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vcg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="60" column="0" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
           <folding />
         </state>
       </provider>

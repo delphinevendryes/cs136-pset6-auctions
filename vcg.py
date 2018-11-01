@@ -52,7 +52,12 @@ class VCG:
             c = slot_clicks
             n = len(allocation)
 
+            # In VCG, pay the negative externality ie difference in n clicks for positions greater than k
             # TODO: Compute the payment and return it.
+            payment = 0
+            for i in range(k+1, n):
+                payment += c[i-1] - c[i]
+            return payment
 
         def norm(totals):
             """Normalize total payments by the clicks in each slot"""
