@@ -63,7 +63,7 @@ class BBAgent:
         the other-agent bid for that slot in the last round.  If slot_id = 0,
         max_bid is min_bid * 2
         """
-        i =  argmax_index(self.expected_utils(t, history, reserve))
+        i = argmax_index(self.expected_utils(t, history, reserve))
         info = self.slot_info(t, history, reserve)
         return info[i]
 

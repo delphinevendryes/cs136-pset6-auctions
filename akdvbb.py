@@ -64,21 +64,10 @@ class Akdvbb:
         """
         # TODO: Fill this in
         prev_round = history.round(t-1)
-        all_clickthroughs = self.clicks_all(t, len(prev_round.occupants))   # Change this
-        all_bids = [x[1] for x in prev_round.bids]
-        all_bids = sorted(all_bids, reverse=True)
-        all_bids_shift = all_bids[1:]
-        #FIXME: Might need to have these align
-       # all_bids_shift.append(0)
-        all_expected_utilities = []
-#        print("All clickthrough")
-#        print(all_clickthroughs)
-#        print("All bids")
-#        print(all_bids_shift)
-        for i in range(0, len(all_bids_shift)):
-            all_expected_utilities.append(all_clickthroughs[i] * (self.value - all_bids_shift[i]))
-#        print("expect utilties")
-        print(all_expected_utilities)
+        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        clicks = prev_round.clicks
+        all_bids = sorted([x[1] for x in other_bids], reverse=True)
+        all_expected_utilities = [clicks[i] * (self.value - all_bids[i]) for i in range(len(all_bids))]
         return all_expected_utilities
 
     def target_slot(self, t, history, reserve):
@@ -89,7 +78,7 @@ class Akdvbb:
         the other-agent bid for that slot in the last round.  If slot_id = 0,
         max_bid is min_bid * 2
         """
-        i =  argmax_index(self.expected_utils(t, history, reserve))
+        i = argmax_index(self.expected_utils(t, history, reserve))
         info = self.slot_info(t, history, reserve)
         return info[i]
 
@@ -105,12 +94,25 @@ class Akdvbb:
         # If s*_j is the top slot, bid the value v_j
 
         prev_round = history.round(t-1)
-        print(prev_round)
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
-
         # TODO: Fill this in.
-        bid = 0  # change this
-        
+        if slot == 0:
+            bid = self.value
+
+        else:
+            # Need:
+            # 1. our value.
+            # 2. number of clicks for pos j over j-1.
+            # 3. payment at pos star in previous round
+            other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+            all_bids = sorted([x[1] for x in other_bids], reverse=True)
+            t_star = all_bids[slot]
+            if self.value - t_star < 0:
+                bid = self.value
+            else:
+                ratio = (1.0 * prev_round.clicks[slot]) / (1.0 * prev_round.clicks[slot - 1])
+                bid = self.value - ratio * (self.value - t_star)
+                assert (bid >= min_bid) & (bid <= max_bid)
         return bid
 
     def __repr__(self):

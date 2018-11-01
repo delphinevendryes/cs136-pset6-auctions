@@ -372,7 +372,10 @@ def main(args):
         logging.info("\n")
     m = mean(total_revenues)
     std = stddev(total_revenues)
+    m_u = mean([totals[key]/N for key in totals])
+    std_u = stddev([totals[key]/N for key in totals])
     logging.warning("Average daily revenue (stddev): $%.2f ($%.2f)" % (0.01 * m, 0.01*std))
+    logging.warning("Average daily utility (stddev): $%.2f ($%.2f)" % (0.01 * m_u, 0.01 * std_u))
 
 #print "config", config.budget
     
