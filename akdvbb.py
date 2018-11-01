@@ -65,9 +65,17 @@ class Akdvbb:
         # TODO: Fill this in
         prev_round = history.round(t-1)
         other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        #other_bids = prev_round.bids
         clicks = prev_round.clicks
         all_bids = sorted([x[1] for x in other_bids], reverse=True)
-        all_expected_utilities = [clicks[i] * (self.value - all_bids[i]) for i in range(len(all_bids))]
+        #all_bids.append(0)
+        num_slots = len(clicks)
+        for _ in range(len(all_bids), num_slots):
+            all_bids.append(0)
+        all_bids = [max(x, reserve) for x in all_bids ]
+
+        all_expected_utilities = [clicks[i] * (self.value - max(all_bids[i], reserve)) for i in range(len(all_bids))]
+        #all_expected_utilities.append(reserve)
         return all_expected_utilities
 
     def target_slot(self, t, history, reserve):
@@ -106,6 +114,8 @@ class Akdvbb:
             # 3. payment at pos star in previous round
             other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
             all_bids = sorted([x[1] for x in other_bids], reverse=True)
+            all_bids.append(0)
+            all_bids = [max(x, reserve) for x in all_bids ]
             t_star = all_bids[slot]
             if self.value - t_star < 0:
                 bid = self.value
