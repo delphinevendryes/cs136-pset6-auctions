@@ -11,9 +11,10 @@ class Akdvbudget:
         self.id = id
         self.value = value
         self.budget = budget
+        self.estimated_values = []
 
     def initial_bid(self, reserve):
-        return self.value / 2
+        return self.value / 2 # for now, might change
 
 
     def slot_info(self, t, history, reserve):
@@ -50,10 +51,20 @@ class Akdvbudget:
         returns a list of utilities per slot.
         """
         # TODO: Fill this in
-        utilities = []   # Change this
+        prev_round = history.round(t-1)
+        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        #other_bids = prev_round.bids
+        clicks = prev_round.clicks
+        all_bids = sorted([x[1] for x in other_bids], reverse=True)
+        #all_bids.append(0)
+        num_slots = len(clicks)
+        for _ in range(len(all_bids), num_slots):
+            all_bids.append(0)
+        all_bids = [max(x, reserve) for x in all_bids ]
 
-        
-        return utilities
+        all_expected_utilities = [clicks[i] * (self.value - max(all_bids[i], reserve)) for i in range(len(all_bids))]
+        #all_expected_utilities.append(reserve)
+        return all_expected_utilities
 
     def target_slot(self, t, history, reserve):
         """Figure out the best slot to target, assuming that everyone else
@@ -80,11 +91,78 @@ class Akdvbudget:
 
         prev_round = history.round(t-1)
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
-
         # TODO: Fill this in.
-        bid = 0  # change this
-        
+        if slot == 0:
+            bid = self.value
+
+        else:
+            # Need:
+            # 1. our value.
+            # 2. number of clicks for pos j over j-1.
+            # 3. payment at pos star in previous round
+            other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+            all_bids = sorted([x[1] for x in other_bids], reverse=True)
+            all_bids.append(0)
+            all_bids = [max(x, reserve) for x in all_bids ]
+            t_star = all_bids[slot]
+            if self.value - t_star < 0:
+                bid = self.value
+            else:
+                ratio = (1.0 * prev_round.clicks[slot]) / (1.0 * prev_round.clicks[slot - 1])
+                bid = self.value - ratio * (self.value - t_star)
+                assert (bid >= min_bid) & (bid <= max_bid)
+
+        self.estimate_values(t, history, reserve)
+
         return bid
+
+    def estimate_values(self, t, history, reserve): # this is only
+        # the values are drawn in U[25, 175]
+        prev_round = history.round(t-1)
+
+        other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
+        # check that bids are sorted by agent id
+        if t == 1: # at second round, estimate with the mean 100, to refine
+            self.estimated_values = [(other_bids[k][0], 100) for k in range(len(other_bids))]
+
+        # assume the agents are playing balanced bidding
+        else :
+            prevprev_round = history.round(t - 2)
+            clicks = prevprev_round.clicks
+            for i in range(len(other_bids)):
+                # assume agent i is playing balanced bids
+                id_i = other_bids[i][0]
+                bid_i = other_bids[i][1]
+
+                other_bids_i = filter(lambda (a_id, b): a_id != id_i, prevprev_round.bids)
+                other_bids_i = sorted([x[1] for x in other_bids_i], reverse=True)
+
+                num_slots = len(clicks)
+
+                for _ in range(len(other_bids_i), num_slots):
+                    other_bids_i.append(0)
+
+                other_bids_i = [max(x, reserve) for x in other_bids_i]
+                expected_utilities_i = [clicks[k] * (self.estimated_values[i][1] - max(other_bids_i[k], reserve)) for k in range(len(other_bids_i))]
+
+                target_slot_i = argmax_index(expected_utilities_i)
+
+                if target_slot_i == 0:
+                    value_i = bid_i
+
+                elif expected_utilities_i[target_slot_i] < 0:
+                    value_i = bid_i
+                else :
+                    t_star_i = other_bids_i[target_slot_i]
+                    value_i = (clicks[target_slot_i] * t_star_i - bid_i * clicks[target_slot_i - 1]) / \
+                              (clicks[target_slot_i] - clicks[target_slot_i-1])
+
+                if t == 2:
+                    self.estimated_values[i] = (id_i, value_i)
+                else :
+                    self.estimated_values[i] = (id_i, (self.estimated_values[i][1] * (t-1) + value_i)/t)
+
+
 
     def __repr__(self):
         return "%s(id=%d, value=%d)" % (
