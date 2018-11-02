@@ -12,10 +12,38 @@ class Akdvbudget:
         self.value = value
         self.budget = budget
         self.estimated_values = []
+        self.spent = []
 
     def initial_bid(self, reserve):
-        print((self.id, self.value))
+        # print((self.id, self.value))
+
         return self.value / 2 # for now, might change
+
+
+    def update_spent(self, history, t, reserve):
+
+        def bid_sort(bids):
+            s = sorted(range(len(bids)), key=lambda k: bids[k][1], reverse=True)
+            return [bids[j] for j in s]
+
+        prev_round = history.round(t-1)
+        bids = prev_round.bids
+        valid_bids = filter(lambda (a_id, b): b >= reserve, bids)
+        valid_bids = bid_sort(valid_bids)
+        bids = bid_sort(bids)
+
+        num_agents = len(bids)
+        num_slots = len(prev_round.clicks)
+        n_alloc = min(len(valid_bids), num_slots)
+
+        if t == 1:
+            self.spent = [0 for _ in range(num_agents)]
+
+        for k, b in enumerate(valid_bids):
+            agent_id = b[0]
+            if k < n_alloc:
+                self.spent[agent_id] += max(bids[k + 1][1], reserve)
+
 
 
     def slot_info(self, t, history, reserve):
@@ -51,20 +79,19 @@ class Akdvbudget:
 
         returns a list of utilities per slot.
         """
+
         # TODO: Fill this in
         prev_round = history.round(t-1)
         other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
-        #other_bids = prev_round.bids
         clicks = prev_round.clicks
         all_bids = sorted([x[1] for x in other_bids], reverse=True)
-        #all_bids.append(0)
         num_slots = len(clicks)
         for _ in range(len(all_bids), num_slots):
             all_bids.append(0)
         all_bids = [max(x, reserve) for x in all_bids ]
 
         all_expected_utilities = [clicks[i] * (self.value - max(all_bids[i], reserve)) for i in range(len(all_bids))]
-        #all_expected_utilities.append(reserve)
+
         return all_expected_utilities
 
     def target_slot(self, t, history, reserve):
@@ -80,15 +107,8 @@ class Akdvbudget:
         return info[i]
 
     def bid(self, t, history, reserve):
-        # The Balanced bidding strategy (BB) is the strategy for a player j that, given
-        # bids b_{-j},
-        # - targets the slot s*_j which maximizes his utility, that is,
-        # s*_j = argmax_s {clicks_s (v_j - t_s(j))}.
-        # - chooses his bid b' for the next round so as to
-        # satisfy the following equation:
-        # clicks_{s*_j} (v_j - t_{s*_j}(j)) = clicks_{s*_j-1}(v_j - b')
-        # (p_x is the price/click in slot x)
-        # If s*_j is the top slot, bid the value v_j
+        self.update_spent(history, t, reserve)
+
 
         prev_round = history.round(t-1)
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
@@ -169,8 +189,8 @@ class Akdvbudget:
                     self.estimated_values[i] = (id_i, (self.estimated_values[i][1] * (t-2) + value_i)/(t-1))
 
                 self.estimated_values[i] = (id_i, value_i)
-        print('Guess from agent %d at round %d' )% (self.id, t)
-        print(self.estimated_values)
+        #print('Guess from agent %d at round %d' )% (self.id, t)
+        #print(self.estimated_values)
 
 
     def __repr__(self):
