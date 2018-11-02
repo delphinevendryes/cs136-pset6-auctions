@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45832265-ee1f-44a0-913d-204461f7493f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/akdvbudget.py" afterPath="$PROJECT_DIR$/akdvbudget.py" />
     </list>
     <ignored path="pset6_code.iws" />
@@ -36,8 +35,8 @@
       <file leaf-file-name="akdvbudget.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/akdvbudget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+            <state relative-caret-position="1266">
+              <caret line="166" column="62" selection-start-line="166" selection-start-column="62" selection-end-line="166" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -298,7 +297,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2" y="23" width="1278" height="708" extended-state="6" />
+    <frame x="2" y="23" width="1278" height="708" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1272872" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -528,8 +527,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/akdvbudget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+        <state relative-caret-position="1266">
+          <caret line="166" column="62" selection-start-line="166" selection-start-column="62" selection-end-line="166" selection-end-column="62" />
           <folding />
         </state>
       </provider>

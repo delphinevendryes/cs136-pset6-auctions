@@ -14,6 +14,7 @@ class Akdvbudget:
         self.estimated_values = []
 
     def initial_bid(self, reserve):
+        print((self.id, self.value))
         return self.value / 2 # for now, might change
 
 
@@ -156,14 +157,16 @@ class Akdvbudget:
                     value_i = (clicks[target_slot_i] * t_star_i - bid_i * clicks[target_slot_i - 1]) / \
                               (clicks[target_slot_i] - clicks[target_slot_i-1])
 
-                # if value_i < 25:
-                #     value_i = 25
-                # if value_i > 175:
-                #     value_i = 175
-                # if t == 2:
-                #     self.estimated_values[i] = (id_i, value_i)
-                # else :
-                #     self.estimated_values[i] = (id_i, (self.estimated_values[i][1] * (t-1) + value_i)/t)
+                if value_i < 25:
+                     value_i = 25
+
+                if value_i > 175:
+                     value_i = 175
+
+                if t == 2:
+                    self.estimated_values[i] = (id_i, value_i)
+                else:
+                    self.estimated_values[i] = (id_i, (self.estimated_values[i][1] * (t-2) + value_i)/(t-1))
 
                 self.estimated_values[i] = (id_i, value_i)
         print('Guess from agent %d at round %d' )% (self.id, t)
