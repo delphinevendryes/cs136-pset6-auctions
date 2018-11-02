@@ -4,6 +4,8 @@ import sys
 
 from gsp import GSP
 from util import argmax_index
+import math
+import random
 
 class Akdvbudget:
     """Balanced bidding agent"""
@@ -13,6 +15,8 @@ class Akdvbudget:
         self.budget = budget
         self.estimated_values = []
         self.spent = []
+        self.p = 0
+        self.q = 0
 
     def initial_bid(self, reserve):
         # print((self.id, self.value))
@@ -94,6 +98,22 @@ class Akdvbudget:
 
         return all_expected_utilities
 
+    def participate(self, t, bid):
+        def sigmoid(x):
+            return 1.0/(1.0+math.exp(-x))
+
+        self_spent = self.spent[self.id]
+        others_spent = [self.spent[i] for i in range(len(self.spent)) if i != self.id]
+        p = sigmoid((t-24)/48 + (- bid - self_spent + sum(others_spent) / len(others_spent))/100)
+        #print(p)
+        r = random.random()
+        if r < p:
+            return True
+
+        else:
+            #print('did not participate')
+            return False
+
     def target_slot(self, t, history, reserve):
         """Figure out the best slot to target, assuming that everyone else
         keeps their bids constant from the previous rounds.
@@ -107,15 +127,15 @@ class Akdvbudget:
         return info[i]
 
     def bid(self, t, history, reserve):
+        # update record of spendings given last round
         self.update_spent(history, t, reserve)
 
 
+        # compute BB
         prev_round = history.round(t-1)
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
-        # TODO: Fill this in.
         if slot == 0:
             bid = self.value
-
         else:
             # Need:
             # 1. our value.
@@ -124,7 +144,7 @@ class Akdvbudget:
             other_bids = filter(lambda (a_id, b): a_id != self.id, prev_round.bids)
             all_bids = sorted([x[1] for x in other_bids], reverse=True)
             all_bids.append(0)
-            all_bids = [max(x, reserve) for x in all_bids ]
+            all_bids = [max(x, reserve) for x in all_bids]
             t_star = all_bids[slot]
             if self.value - t_star < 0:
                 bid = self.value
@@ -133,10 +153,18 @@ class Akdvbudget:
                 bid = self.value - ratio * (self.value - t_star)
                 assert (bid >= min_bid) & (bid <= max_bid)
 
-        self.estimate_values(t, history, reserve)
-        return bid
+        participate = self.participate(t, bid)
+        if not participate:
+            self.q += 1
+            return 0
 
-    def estimate_values(self, t, history, reserve): # this is only
+            # self.estimate_values(t, history, reserve)
+        else:
+            self.p += 1
+            print(self.p, self.q)
+            return bid
+
+    def estimate_values(self, t, history, reserve): # this is assuming other players play BB
         # the values are drawn in U[25, 175]
         prev_round = history.round(t-1)
 
