@@ -35,7 +35,6 @@ class Akdvbudget:
         valid_bids = filter(lambda (a_id, b): b >= reserve, bids)
         valid_bids = bid_sort(valid_bids)
         bids = bid_sort(bids)
-
         num_agents = len(bids)
         num_slots = len(prev_round.clicks)
         n_alloc = min(len(valid_bids), num_slots)
@@ -47,7 +46,6 @@ class Akdvbudget:
             agent_id = b[0]
             if k < n_alloc:
                 self.spent[agent_id] += max(bids[k + 1][1], reserve)
-
 
 
     def slot_info(self, t, history, reserve):
@@ -98,16 +96,34 @@ class Akdvbudget:
 
         return all_expected_utilities
 
-    def participate(self, t, bid):
+    def participate(self, t , bid, num_rounds):
         def sigmoid(x):
             return 1.0/(1.0+math.exp(-x))
+        
 
         self_spent = self.spent[self.id]
         others_spent = [self.spent[i] for i in range(len(self.spent)) if i != self.id]
-        p = sigmoid((t-24)/48 + (- bid - self_spent + sum(others_spent) / len(others_spent))/100)
+        
+        budget = self.budget
+
+
+        inner = ((t- (num_rounds / 2 ))/num_rounds + (- float(num_rounds / budget * bid) + (float(sum(others_spent)) / float(len(others_spent))) / self_spent ) )
+        p = sigmoid(inner)
+#        p = sigmoid((t-24)/48 + (- bid - self_spent + sum(others_spent) / len(others_spent))/100)
+
         #print(p)
+        #print("-bid is f" % -bid)
+        #print("self_spent is f" % -self_spent)
+#        if(self.id == 2):
+#            print("This is prob")
+#            print("bid is %d" % bid)
+#            print("average others is %f" % (float(sum(others_spent)) / float(len(others_spent))))
+#            print("My spent is %f" % self_spent)
+#            print("Inner was %f" % inner)
+#            print("My probabliy of particpating is %f" % p)
         r = random.random()
         if r < p:
+            
             return True
 
         else:
@@ -153,12 +169,17 @@ class Akdvbudget:
                 bid = self.value - ratio * (self.value - t_star)
                 assert (bid >= min_bid) & (bid <= max_bid)
 
-        participate = self.participate(t, bid)
+        participate = self.participate(t, bid, int(history.num_rounds()))
+        
         if not participate:
             self.q += 1
-            return 0
+            temp_reserve = reserve
+            # If the reserve is 0 then a bid of zero is hard to tell whether
+            # it was really bidded at zero or there's no budget. Hence we add a bit
+            if(reserve == 0): 
+                temp_reserve = 0.01
+            return min(temp_reserve, bid) 
 
-            # self.estimate_values(t, history, reserve)
         else:
             self.p += 1
             #print(self.p, self.q)
@@ -217,9 +238,6 @@ class Akdvbudget:
                     self.estimated_values[i] = (id_i, (self.estimated_values[i][1] * (t-2) + value_i)/(t-1))
 
                 self.estimated_values[i] = (id_i, value_i)
-        #print('Guess from agent %d at round %d' )% (self.id, t)
-        #print(self.estimated_values)
-
 
     def __repr__(self):
         return "%s(id=%d, value=%d)" % (
