@@ -113,7 +113,6 @@ class Akdvbudget:
                 assert (bid >= min_bid) & (bid <= max_bid)
 
         self.estimate_values(t, history, reserve)
-
         return bid
 
     def estimate_values(self, t, history, reserve): # this is only
@@ -130,7 +129,7 @@ class Akdvbudget:
             prevprev_round = history.round(t - 2)
             clicks = prevprev_round.clicks
             for i in range(len(other_bids)):
-                # assume agent i is playing balanced bids
+                # assume agent i is playing balanced bids in round t-1
                 id_i = other_bids[i][0]
                 bid_i = other_bids[i][1]
 
@@ -157,11 +156,18 @@ class Akdvbudget:
                     value_i = (clicks[target_slot_i] * t_star_i - bid_i * clicks[target_slot_i - 1]) / \
                               (clicks[target_slot_i] - clicks[target_slot_i-1])
 
-                if t == 2:
-                    self.estimated_values[i] = (id_i, value_i)
-                else :
-                    self.estimated_values[i] = (id_i, (self.estimated_values[i][1] * (t-1) + value_i)/t)
+                # if value_i < 25:
+                #     value_i = 25
+                # if value_i > 175:
+                #     value_i = 175
+                # if t == 2:
+                #     self.estimated_values[i] = (id_i, value_i)
+                # else :
+                #     self.estimated_values[i] = (id_i, (self.estimated_values[i][1] * (t-1) + value_i)/t)
 
+                self.estimated_values[i] = (id_i, value_i)
+        print('Guess from agent %d at round %d' )% (self.id, t)
+        print(self.estimated_values)
 
 
     def __repr__(self):
