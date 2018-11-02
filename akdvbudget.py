@@ -161,7 +161,7 @@ class Akdvbudget:
             # self.estimate_values(t, history, reserve)
         else:
             self.p += 1
-            print(self.p, self.q)
+            #print(self.p, self.q)
             return bid
 
     def estimate_values(self, t, history, reserve): # this is assuming other players play BB

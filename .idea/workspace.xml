@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45832265-ee1f-44a0-913d-204461f7493f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/akdvbudget.py" afterPath="$PROJECT_DIR$/akdvbudget.py" />
     </list>
     <ignored path="pset6_code.iws" />
@@ -36,8 +35,8 @@
       <file leaf-file-name="akdvbudget.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/akdvbudget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="164" column="12" selection-start-line="164" selection-start-column="12" selection-end-line="164" selection-end-column="12" />
+            <state relative-caret-position="336">
+              <caret line="163" column="13" selection-start-line="163" selection-start-column="13" selection-end-line="163" selection-end-column="13" />
               <folding>
                 <element signature="e#23#33#0" expanded="true" />
               </folding>
@@ -571,8 +570,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/akdvbudget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="164" column="12" selection-start-line="164" selection-start-column="12" selection-end-line="164" selection-end-column="12" />
+        <state relative-caret-position="336">
+          <caret line="163" column="13" selection-start-line="163" selection-start-column="13" selection-end-line="163" selection-end-column="13" />
           <folding>
             <element signature="e#23#33#0" expanded="true" />
           </folding>
