@@ -45,7 +45,6 @@ class VCG:
         (allocation, just_bids) = zip(*allocated_bids)
 
         def total_payment(k):
-            print("At this stage k=%d" % k)
             """
             Total payment for a bidder in slot k.
             """
@@ -53,8 +52,6 @@ class VCG:
             n = len(allocation)
             v_bids = [x[1] for x in valid_bids]
             if k == n-1:
-                print(v_bids)
-                print(c)
                 if len(v_bids) <= k+1:
                     return c[k] * reserve
                 else:
