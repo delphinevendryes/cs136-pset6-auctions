@@ -183,6 +183,11 @@ class Akdvbudget:
         else:
             self.p += 1
             #print(self.p, self.q)
+            #Blend bid between ours and full value as we get closer to the end
+            if(history.num_rounds() - t <= 10):
+                theta = (history.num_rounds() - t)/ 10.0
+                bid = min(bid * (1 -theta)+ (theta) * self.value, (self.budget - self.spent[self.id]) )
+            
             return bid
 
     def estimate_values(self, t, history, reserve): # this is assuming other players play BB
